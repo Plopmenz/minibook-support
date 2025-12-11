@@ -16,6 +16,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    hardware.sensor.iio.enable = true;
     systemd.services = {
       keyboardd = {
         description = "Daemon for the keyboardd of the MiniBook";
