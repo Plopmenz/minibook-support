@@ -16,7 +16,15 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    boot.kernelParams = [
+      "fbcon=rotate:1"
+    ];
+    services.xserver.displayManager.setupCommands = ''
+      ${lib.getExe pkgs.xrandr} --output DSI-1 --rotate right
+    '';
+
     hardware.sensor.iio.enable = true;
+
     systemd.services = {
       keyboardd = {
         description = "Daemon for the keyboardd of the MiniBook";
@@ -56,6 +64,7 @@ in
         after = [
           "moused.service"
           "keyboardd.service"
+          "iio-sensor-proxy.service"
           "sysinit.target"
           "basic.target"
         ];
